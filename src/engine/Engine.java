@@ -12,7 +12,6 @@ public class Engine {
         File dir = new File(dirname);
         File[] listOffFile = dir.listFiles();
 
-        int count = 0;
         for (File file: listOffFile) {
             String t = "";
 
@@ -20,7 +19,7 @@ public class Engine {
                 Scanner sc = new Scanner(file);
 
                 while (sc.hasNextLine()) {
-                    t = t + sc.nextLine() + "\n";
+                    t += sc.nextLine() + "\n";
                 }
 
             } catch (Exception e) {
@@ -41,21 +40,33 @@ public class Engine {
         List<Result> r = new ArrayList<Result>();
         Doc[] doc = getDocs();
         for (int i = 0 ; i < doc.length; i++) {
-            List<Match> match;
-            match = q.matchAgainst(doc[i]);
-            if (match.size() <= 0) {
-                break;
+            if (handleResult(doc[i], q) != null) {
+                r.add(handleResult(doc[i], q));
             }
-            r.add(new Result(doc[i], match));
         }
-      Collections.sort(r);
+        Collections.sort(r);
         return r;
+    }
+
+    public Result handleResult(Doc doc, Query q) {
+        List<Match> match;
+        Doc d = doc;
+        match = q.matchAgainst(d);
+        int m = match.size();
+        if (m <= 0) {
+            return null;
+        }
+        Result re = new Result(d, match);
+        return re;
     }
 
     public String htmlResult(List<Result> results) {
         String s = "";
-        for (int i = 0; i < results.size(); i++){
-            s = s + results.get(i).htmlHighlight();
+        int i = 0;
+        while (i < results.size()){
+            Result r = results.get(i);
+            s += r.htmlHighlight();
+            i++;
         }
 
         return s;

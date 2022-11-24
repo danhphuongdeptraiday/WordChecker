@@ -1,16 +1,16 @@
 package engine;
 
 public class Match implements Comparable<Match>{
-    private Doc doc;
+    private Doc document;
     private Word word;
-    private int frequency;
-    public int firstIndex;
+    private int fre;
+    public int firstIn;
 
     public Match(Doc d, Word w, int freq, int firstIndex) {
-        this.doc =  d;
+        this.document =  d;
         this.word = w;
-        this.frequency = freq;
-        this.firstIndex = firstIndex;
+        this.fre = freq;
+        this.firstIn = firstIndex;
     }
 
     public Word getWord() {
@@ -18,17 +18,19 @@ public class Match implements Comparable<Match>{
     }
 
     public int getFreq() {
-        return this.frequency;
+        return this.fre;
     }
 
     public int getFirstIndex()  {
-        return this.firstIndex;
+        return this.firstIn;
     }
 
     public int compareTo(Match o) {
-        if (this.getFirstIndex() < o.getFirstIndex()) {
+        int a = getFirstIndex();
+        int b = o.getFirstIndex();
+        if (a < b) {
             return -1;
-        } else if (this.getFirstIndex() > o.getFirstIndex()) {
+        } else if (a > o.getFirstIndex()) {
             return 1;
         }
         return 0;

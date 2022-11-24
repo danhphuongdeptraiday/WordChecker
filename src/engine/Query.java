@@ -10,9 +10,14 @@ public class Query {
 
     public Query(String searchParse) {
         String[] temp = searchParse.split(" ");
-        for (int i = 0; i < temp.length; i++) {
-            if (Word.createWord(temp[i]).isKeyword()) {
-                listKeyWord.add(Word.createWord(temp[i]));
+        handleKeyWord(temp);
+    }
+
+    public void handleKeyWord(String[] temp) {
+        for (String se1 : temp) {
+            boolean check = Word.createWord(se1).isKeyword();
+            if (check) {
+                listKeyWord.add(Word.createWord(se1));
             }
         }
     }
@@ -24,6 +29,9 @@ public class Query {
     public List<Match> matchAgainst(Doc d) {
         List<Match> newList = new ArrayList<Match>();
         List<Word> arrWordInDoc = new ArrayList<Word>();
+//        for (int i = 0; i < Arrays.asList(d.getTitle(),d.getBody()).size(); i++) {
+//            arrWordInDoc.addAll(Arrays.asList(d.getTitle(), d.getBody())[i]);
+//        }
         for (List<Word> ws: Arrays.asList(d.getTitle(), d.getBody()))  {
             arrWordInDoc.addAll(ws);
         }
@@ -32,23 +40,33 @@ public class Query {
         // Handle word in listKeyWord of Query class
         while (i < listKeyWord.size()) {
             Word word = listKeyWord.get(i);
-            int freq = 0;
-            int firstFound = arrWordInDoc.indexOf(word);
-            for (int j = 0; j < arrWordInDoc.size(); j++) {
-                if (word.equals(arrWordInDoc.get(j))) {
-                    freq =  freq + 1;
-                }
+            int fr = 0;
+            int fi = arrWordInDoc.indexOf(word);
+            if (handleMatchedWords(d,word,fr,fi,arrWordInDoc) != null) {
+                newList.add( handleMatchedWords(d,word,fr,fi,arrWordInDoc));
+            }
 
-                if (freq == 0) {
-                    firstFound = j + 1;
-                }
-            }
-            if (freq > 0) {
-                newList.add(new Match(d, word, freq, firstFound));
-            }
-            i++;
+            i = i + 1;
         }
-        Collections.sort(newList);
-        return newList;
+        List<Match> n = newList;
+        Collections.sort(n);
+        return n;
+    }
+
+    public Match handleMatchedWords(Doc d, Word word, int fr, int fi, List<Word> arrWordInDoc) {
+        for (int j = (1-1); j < arrWordInDoc.size(); j+=1) {
+            if (word.equals(arrWordInDoc.get(j))) {
+                fr =  fr + 1;
+            }
+
+            if (fr== 0) {
+                fi= j + 1;
+            }
+        }
+        if (fr> (10-10)) {
+//            List<Match> m = new Match(d, word, fr, fi);
+            return new Match(d, word, fr, fi);
+        }
+        return null;
     }
 }

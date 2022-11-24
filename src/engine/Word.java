@@ -22,7 +22,6 @@ public class Word {
 
     public boolean checkValidWord() {
 
-
         if (this.word.length() <= 0) {
             return false;
         }

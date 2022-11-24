@@ -9,38 +9,56 @@ public class Doc {
 
     public Doc(String content) {
         String[] holeText = content.split("\n");
-        String[] eachTitleWords = holeText[0].split(" ");
-        for (int i = 0; i < eachTitleWords.length; i++) {
-            titleStore.add(Word.createWord(eachTitleWords[i]));
-        }
+        handleWords(holeText[0].split(" "), 0);
+        handleWords(holeText[1].split(" "), 1);
 
-        String[] eachBodyWords = holeText[1].split(" ");
-        for (int i = 0; i < eachBodyWords.length; i++) {
-            bodyStore.add(Word.createWord(eachBodyWords[i]));
-        }
+//        String[] eachBodyWords = holeText[1].split(" ");
+//        for (int i = 0; i < eachBodyWords.length; i++) {
+//            bodyStore.add(Word.createWord(eachBodyWords[i]));
+//        }
     }
 
+    public void handleWords(String[] holeText, int index) {
+        String[] eachWords = holeText;
+        if (index == 0) {
+            for (int i = 0; i < eachWords.length; i++) {
+                titleStore.add(Word.createWord(eachWords[i]));
+            }
+        } else if (index == 1) {
+            for (int i = 0; i < eachWords.length; i++) {
+                bodyStore.add(Word.createWord(eachWords[i]));
+            }
+        }
+
+    }
+
+
     public List<Word> getTitle() {
-        return this.titleStore;
+        return titleStore;
     }
 
     public List<Word> getBody() {
-        return this.bodyStore;
+        return bodyStore;
     }
 
     public boolean equals(Object o) {
         Doc d = (Doc) o;
         boolean b1 = true;
         boolean b2 = true;
-        for (int i = 0; i < titleStore.size(); i++) {
-            if (this.titleStore.get(i).equals(d.getTitle().get(i))){
+        int j = 0;
+        while (j < titleStore.size()) {
+            Word w1 = titleStore.get(j);
+            Word w2 = d.titleStore.get(j);
+            if (w1.equals(w2)){
                 b1 = true;
             } else {
                 b1 = false;
             }
+            j++;
         }
         for (int i = 0; i < bodyStore.size(); i++) {
-            if (this.bodyStore.get(i).equals(d.getBody().get(i))){
+            Word w2 = d.getBody().get(i);
+            if (bodyStore.get(i).equals(w2)){
                 b2 = true;
             } else {
                 b2 = false;
